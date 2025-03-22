@@ -1,0 +1,88 @@
+type User @entity {
+  id: Bytes!
+  staked: BigInt!
+  rewards: BigInt!
+  pendingRewards: BigInt!
+  totalStaked: BigInt!
+  totalWithdrawn: BigInt!
+  totalRewardsClaimed: BigInt!
+  lastStakeTimestamp: BigInt!
+  lastWithdrawTimestamp: BigInt!
+  lastClaimTimestamp: BigInt!
+  lastEmergencyWithdrawTimestamp: BigInt!
+  lastPenaltyTimestamp: BigInt!
+  currentRewardRate: BigInt!
+  withdrawns: [Withdrawn!]! @derivedFrom(field: "user")
+  stakeds: [Staked!]! @derivedFrom(field: "user")
+  rewardsClaimeds: [RewardsClaimed!]! @derivedFrom(field: "user")
+  emergencyWithdrawns: [EmergencyWithdrawn!]! @derivedFrom(field: "user")
+
+}
+
+type EmergencyWithdrawn @entity {
+  id: Bytes!
+  user: User! # address
+  amount: BigInt! # uint256
+  penalty: BigInt! # uint256
+  timestamp: BigInt! # uint256
+  newTotalStaked: BigInt! 
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+}
+
+
+type RewardRateUpdated @entity {
+  id: Bytes!
+  oldRate: BigInt! # uint256
+  newRate: BigInt! # uint256
+  timestamp: BigInt! # uint256
+  totalStaked: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+}
+
+type RewardsClaimed @entity {
+  id: Bytes!
+  user: User! # address
+  amount: BigInt! # uint256
+  timestamp: BigInt! # uint256
+  newPendingRewards: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Staked @entity {
+  id: Bytes!
+  user: User! # address
+  amount: BigInt! # uint256
+  timestamp: BigInt! # uint256
+  newTotalStaked: BigInt! # uint256
+  currentRewardRate: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+}
+
+
+type TokenRecovered @entity {
+  id: Bytes!
+  token: Bytes! # address
+  amount: BigInt! # uint256
+  timestamp: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+}
+
+
+type Withdrawn @entity {
+  id: Bytes!
+  user: User! # address
+  amount: BigInt! # uint256
+  timestamp: BigInt! # uint256
+  newTotalStaked: BigInt! # uint256
+  currentRewardRate: BigInt! # uint256
+  rewardsAccrued: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
